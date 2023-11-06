@@ -5,6 +5,8 @@
 const char* ssid = "tempNet";
 const char* password = "armaan";
 
+#define LED_BUILTIN 2
+
 int pos =0;
 
 Servo myservo;
