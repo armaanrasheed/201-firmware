@@ -1,30 +1,36 @@
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
-#include <WiFiClientSecure.h>
 
-// Replace with your network credentials
-const char* ssid = "aru";
-const char* password = "123456789";
+const char* ssid = "yourSSID";
+const char* password = "yourPASSWORD";
 
-// Create an instance of the server
-// Specify the port (default is 80)
 AsyncWebServer server(80);
+int received_value = 0;
 
 void setup() {
-  // Start the Serial communication to send messages to the computer
   Serial.begin(9600);
-  delay(10);
+  delay(1000);
 
-  // Set the ESP32 as an access point
+  Serial.print("Setting AP (Access Point)…");
   WiFi.softAP(ssid, password);
 
-  // Print the IP address
-  Serial.println(WiFi.softAPIP());
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
 
-  // Start the server
+  server.on("/endpoint", HTTP_POST, [](AsyncWebServerRequest *request){
+    if (request->hasParam("value", true)) {
+      received_value = request->getParam("value", true)->value().toInt();
+    }
+    request->send(200);
+  });
+
   server.begin();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // Your code here
+  Serial.print("Received value: ");
+  Serial.println(received_value);
+  delay(1000);
 }

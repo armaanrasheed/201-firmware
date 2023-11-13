@@ -1,5 +1,8 @@
 import cv2
 import math
+
+
+
 path = 'testOne.jpg'
 img = cv2.imread(path)
 img = cv2.resize(img,(927,696))
