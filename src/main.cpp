@@ -4,8 +4,10 @@
 const char* ssid = "yourSSID";
 const char* password = "yourPASSWORD";
 
+
 AsyncWebServer server(80);
 int received_value = 0;
+
 
 void setup() {
   Serial.begin(9600);
