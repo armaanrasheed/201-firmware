@@ -1,59 +1,84 @@
 # 🤖 Robotic System for Automatic Dimensioning and Alignment
 
-## 📝 Project Description
-This project centers around a robotic system designed to automatically dimension mechanical parts as part of an assembly process machine. The robot can measure the size of a part, rotate its platform, and align the part correctly for seamless integration into the assembly process. This capability eliminates the need for manual measurements and adjustments, significantly improving precision and efficiency.
+## 📝 Project Overview
+This repository contains the implementation of a robotic system designed for automatic dimensioning of mechanical parts during the assembly process. The system can measure part dimensions, rotate the platform, and align parts for seamless integration. By automating this process, the system eliminates manual measurements and significantly improves efficiency and precision.
 
 ## ⚙️ System Components
-The system leverages an ESP32 development board for real-time control, OpenCV for image processing to accurately detect part boundaries and dimensions, and Python for communication between the host machine and the ESP32 device.
+The robotic system uses the following key components:
+- **ESP32 Development Board:** Provides real-time control and manages Wi-Fi communication.
+- **OpenCV:** Performs image processing to detect part boundaries and calculate key dimensions.
+- **Python:** Facilitates communication between the host machine and the ESP32 through HTTP requests.
 
-### **Rotating Plate Close-Up**
+### **Component Images**
+**Rotating Plate Close-Up**
 ![rotating plate close up](https://drive.google.com/uc?export=view&id=1RiuAv-psCIWjgl-IF6OugsDXSOn8GrVk)
-**Description:** This image shows a close-up view of the rotating platform used for mechanical alignment. The platform is fitted with a stepper motor that ensures precise rotation. The setup enables accurate placement of parts in various orientations to achieve optimal alignment during the assembly process.
+- **Description:** The rotating platform ensures precise alignment and placement of parts during the assembly process, driven by a stepper motor for accurate rotational control.
 
-### **Webcam Top View**
+**Webcam Top View**
 ![web cam top view](https://drive.google.com/uc?export=view&id=1jasVUBIwGUUQAcynUYVpZrb-sE6_ws1O)
-**Description:** This image provides a top-down view of the workspace as captured by the webcam used in the system. The camera plays a crucial role in the dimensioning module, where OpenCV algorithms process the captured images to detect part boundaries and calculate key dimensions such as width, height, and depth.
+- **Description:** The top-down view captured by the webcam assists the OpenCV module in detecting part boundaries and computing key dimensions.
 
 ## 📂 Project Structure
-Below is a breakdown of the key directories and their relevant files for the rotation tracking and async web server components:
+The project is organized into directories that group related files for rotation tracking and web server communication.
 
-### **Directory Structure:**
 ```
 /project-root
-|-- rotation-tracking-py/
+|-- rotation-tracking-py/   # Python scripts for rotation tracking and communication
 |   |-- rotation-tracking.py
 |   |-- result.txt
 |   |-- server.py
 |
-|-- src/
+|-- src/                    # ESP32 firmware source code
     |-- main.cpp
 ```
 
-### **📁 rotation-tracking-py/**
-This directory contains Python scripts used for image-based rotation tracking and communication with the ESP32 device.
+### **Directory Details**
 
-- **`rotation-tracking.py`**: 
-  - **Purpose:** Tracks rotation angles based on user-defined points in an image.
-  - **Key Features:** 
-    - Displays points clicked by the user and computes angles.
-    - Writes the computed angles to `result.txt`.
-- **`result.txt`**: Stores the computed angle values.
-- **`server.py`**: 
-  - **Purpose:** Reads angle values from `result.txt` and sends them to the ESP32 device using HTTP POST requests.
-  - **Endpoint:** The ESP32 device listens for POST requests at `http://192.168.4.1/endpoint`.
+#### **📁 rotation-tracking-py/**
+This directory contains Python scripts that manage the tracking and communication processes.
 
-### **📁 src/**
-This directory contains the ESP32 source code.
+- **`rotation-tracking.py`**:
+  - **Purpose:** Detects and tracks the rotation angle of a mechanical part based on user-defined points.
+  - **Key Features:**
+    - Displays the image and captures mouse click points to define angles.
+    - Calculates the angle between three points and writes the result to `result.txt`.
+
+- **`result.txt`**:
+  - **Purpose:** Stores the computed angle values for the corresponding part.
+
+- **`server.py`**:
+  - **Purpose:** Sends the computed angles to the ESP32 web server using HTTP POST requests.
+  - **Endpoint:** Sends requests to `http://192.168.4.1/endpoint` (default soft AP IP address of the ESP32).
+
+#### **📁 src/**
+Contains the ESP32 firmware source code for handling incoming HTTP requests.
 
 - **`main.cpp`**:
-  - **Purpose:** Handles communication by setting up the ESP32 as a Wi-Fi Access Point (AP) and an async web server.
+  - **Purpose:** Implements an asynchronous web server on the ESP32.
   - **Key Functions:**
-    - **`setup()`**: Initializes serial communication, configures the AP, and starts the web server.
-    - **`loop()`**: Continuously prints the received rotation values.
+    - **`setup()`**: Configures the ESP32 as a Wi-Fi Access Point and initializes the async web server.
+    - **`loop()`**: Continuously monitors and prints received angle values for real-time observation.
+
+## 🚀 How to Run the System
+1. **Setup the ESP32:**
+   - Flash the ESP32 with `src/main.cpp` using PlatformIO.
+   - Set the desired Wi-Fi SSID and password in the source code.
+2. **Run the Python Script:**
+   - Install dependencies: `pip install opencv-python requests`.
+   - Run `rotation-tracking.py` to capture angles.
+   - Run `server.py` to send the angle to the ESP32.
+3. **Operation:**
+   - Interact with the displayed image to mark key points.
+   - The computed angle is sent to the ESP32, which logs the value.
 
 ## 🛠️ Purpose and Applications
-This robotic system was designed to enhance accuracy and reliability in the assembly process, making it ideal for applications where part orientation and sizing are crucial.
+This system enhances accuracy and reliability during the assembly process, making it ideal for:
+- **Manufacturing Lines:** Where part orientation and sizing are critical.
+- **Quality Control:** Automates and standardizes measurement tasks.
+
+## 📚 References
+- [ESPAsyncWebServer Documentation](https://github.com/me-no-dev/ESPAsyncWebServer)
 
 ---
-Let me know if you need further details or edits!
+Let me know if you need any additional information or modifications!
 
