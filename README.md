@@ -1,71 +1,59 @@
-# 🛠️ Project Overview
-This project consists of several components implemented for rotation tracking using an ESP32 development board, OpenCV for image processing, and Python for communication between the host machine and the ESP32 device. Below is a detailed explanation of each relevant directory and its contents.
+# 🤖 Robotic System for Automatic Dimensioning and Alignment
 
-## 📂 Directory Structure
+## 📝 Project Description
+This project centers around a robotic system designed to automatically dimension mechanical parts as part of an assembly process machine. The robot can measure the size of a part, rotate its platform, and align the part correctly for seamless integration into the assembly process. This capability eliminates the need for manual measurements and adjustments, significantly improving precision and efficiency.
+
+## ⚙️ System Components
+The system leverages an ESP32 development board for real-time control, OpenCV for image processing to accurately detect part boundaries and dimensions, and Python for communication between the host machine and the ESP32 device.
+
+### **Rotating Plate Close-Up**
+![rotating plate close up](https://drive.google.com/uc?export=view&id=1RiuAv-psCIWjgl-IF6OugsDXSOn8GrVk)
+**Description:** This image shows a close-up view of the rotating platform used for mechanical alignment. The platform is fitted with a stepper motor that ensures precise rotation. The setup enables accurate placement of parts in various orientations to achieve optimal alignment during the assembly process.
+
+### **Webcam Top View**
+![web cam top view](https://drive.google.com/uc?export=view&id=1jasVUBIwGUUQAcynUYVpZrb-sE6_ws1O)
+**Description:** This image provides a top-down view of the workspace as captured by the webcam used in the system. The camera plays a crucial role in the dimensioning module, where OpenCV algorithms process the captured images to detect part boundaries and calculate key dimensions such as width, height, and depth.
+
+## 📂 Project Structure
+Below is a breakdown of the key directories and their relevant files for the rotation tracking and async web server components:
+
+### **Directory Structure:**
 ```
 /project-root
 |-- rotation-tracking-py/
+|   |-- rotation-tracking.py
+|   |-- result.txt
+|   |-- server.py
+|
 |-- src/
+    |-- main.cpp
 ```
 
----
+### **📁 rotation-tracking-py/**
+This directory contains Python scripts used for image-based rotation tracking and communication with the ESP32 device.
 
-## 📁 `rotation-tracking-py/` Directory
-Contains Python scripts for rotation tracking using OpenCV and communication with the ESP32 server.
+- **`rotation-tracking.py`**: 
+  - **Purpose:** Tracks rotation angles based on user-defined points in an image.
+  - **Key Features:** 
+    - Displays points clicked by the user and computes angles.
+    - Writes the computed angles to `result.txt`.
+- **`result.txt`**: Stores the computed angle values.
+- **`server.py`**: 
+  - **Purpose:** Reads angle values from `result.txt` and sends them to the ESP32 device using HTTP POST requests.
+  - **Endpoint:** The ESP32 device listens for POST requests at `http://192.168.4.1/endpoint`.
 
-### 📝 `rotation-tracking.py`
-- **Dependencies:** OpenCV (`cv2`) and `math`.
-- **Functionality:**
-  - Reads and resizes the image.
-  - Detects points via mouse clicks and calculates angles based on gradients.
-  - Displays the angle on the image and writes the result to `result.txt`.
+### **📁 src/**
+This directory contains the ESP32 source code.
 
-### 🔧 Key Functions:
-- `mousePoints(event, x, y, flags, params)`: Captures mouse clicks and draws points.
-- `gradient(pt1, pt2)`: Calculates the gradient between two points.
-- `getAngle(pointsList)`: Computes the angle between three points and writes it to `result.txt`.
+- **`main.cpp`**:
+  - **Purpose:** Handles communication by setting up the ESP32 as a Wi-Fi Access Point (AP) and an async web server.
+  - **Key Functions:**
+    - **`setup()`**: Initializes serial communication, configures the AP, and starts the web server.
+    - **`loop()`**: Continuously prints the received rotation values.
 
----
-
-### 📄 `result.txt`
-Stores the computed angle as a text value.
-
----
-
-### 🌐 `server.py`
-- **Dependencies:** `requests`.
-- **Functionality:** Reads `result.txt` and sends the angle value to the ESP32 device using HTTP POST requests.
-- **ESP32 IP:** `192.168.4.1` (default soft AP IP).
+## 🛠️ Purpose and Applications
+This robotic system was designed to enhance accuracy and reliability in the assembly process, making it ideal for applications where part orientation and sizing are crucial.
 
 ---
-
-## 📁 `src/` Directory
-Contains the main source file for the ESP32.
-
-### 📝 `main.cpp`
-- **Dependencies:** `WiFi.h`, `ESPAsyncWebServer.h`.
-- **Functionality:**
-  - Sets up ESP32 as a Wi-Fi Access Point (AP).
-  - Listens for HTTP POST requests at `/endpoint` and reads the value.
-  - Prints received values to the serial monitor.
-
-### 🔧 Key Sections:
-- **`setup()` Function:**
-  - Initializes the serial communication.
-  - Configures Wi-Fi Access Point.
-  - Starts the Async Web Server.
-- **`loop()` Function:**
-  - Continuously prints the received values.
-
----
-
-## 🚀 Future Improvements
-- **Error Handling:** Implement exception handling in Python scripts and the ESP32 code.
-- **Dynamic IP Configuration:** Avoid hardcoding the IP address.
-- **Optimization:** Implement an optimized event loop in the ESP32 code.
-
----
-
-## 📚 References
-- [ESPAsyncWebServer Documentation](https://github.com/me-no-dev/ESPAsyncWebServer)
+Let me know if you need further details or edits!
 
